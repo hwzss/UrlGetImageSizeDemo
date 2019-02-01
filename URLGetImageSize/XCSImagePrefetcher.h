@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XCSImagePrefetcher : NSObject
 
+@property (nonatomic, strong, readonly) NSMutableData *downloadData;
 @property (nonatomic, strong, readonly) NSURL *imageUrl;
 
 - (instancetype)init NS_UNAVAILABLE;
