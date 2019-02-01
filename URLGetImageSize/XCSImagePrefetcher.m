@@ -56,7 +56,6 @@ typedef enum : NSUInteger {
     if (!_queue) {
         _queue = [[NSOperationQueue alloc] init];
         _queue.name = @"com.xcs.image.prefetcher.queue";
-        _queue.maxConcurrentOperationCount = 5;
     }
     return _queue;
 }
@@ -275,7 +274,6 @@ didCompleteWithError:(nullable NSError *)error {
         return CGSizeMake(w, h);
     }
 
-    
     return CGSizeZero;
 }
 

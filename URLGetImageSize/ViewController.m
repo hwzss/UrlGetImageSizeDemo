@@ -49,6 +49,11 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    for (int i = 0; i < 1000; i++) {
+        XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]];
+        NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
+    }
 
 }
 - (IBAction)downloadJPG:(id)sender {
@@ -116,8 +121,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
     return size;
 }
 
-
-
 - (CGSize)jpegImageSizeFromUrl:(NSURL *)url {
     CGSize size = CGSizeZero;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -129,6 +132,7 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 
     return size;
 }
+
 - (CGSize)jpgImageSizeFormUrl:(NSURL *)url {
     CGSize size = CGSizeZero;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -273,7 +277,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
                             block_length = CFSwapInt16HostToBig(block_length);
                         }else {
                             block_length = XCSSwapWebIntToInt16(block_length);
-//                            block_length = CFSwapInt16HostToLittle(block_length);
                         }
                     }
                 } while (i < _imageData.length);
