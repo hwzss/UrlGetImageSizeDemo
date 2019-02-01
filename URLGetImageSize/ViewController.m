@@ -111,9 +111,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
         UInt16 w = 0, h = 0;
         [data getBytes:&w range:NSMakeRange(0, 2)];
         [data getBytes:&h range:NSMakeRange(2, 2)];
-        // FIXME: 按理网络数据是大端，gif 拿的宽高应和png，jpg一样转小端，但是现在却不需要
-//        w = XCSSwapWebIntToInt16(w);
-//        h = XCSSwapWebIntToInt16(h);
         size = CGSizeMake(w, h);
     }
     return size;
@@ -241,9 +238,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
                     block_length = CFSwapInt16HostToBig(block_length);
                 }else {
                     block_length = XCSSwapWebIntToInt16(block_length);
-//                    block_length = CFSwapInt16(block_length);
-                    // FIXME: 按理应该是网络大端转小端，这里转了可是数据不对， 上面代码可以
-//                    block_length = CFSwapInt16HostToLittle(block_length);
                 }
                 int i = 4;
                 do {
