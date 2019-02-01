@@ -18,10 +18,13 @@
  https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1022687199,8493043&fm=26&gp=0.jpg
  http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg
  
+ // BMP
+ https://ssl.gstatic.com/gb/images/v1_051523630.png
  */
 
 #import "ViewController.h"
 #import "UIImage+ImgSize.h"
+#import "XCSImagePrefetcher.h"
 
 CF_INLINE uint16_t XCSSwapWebIntToInt16(uint16_t arg) {
     if (NSHostByteOrder() == CFByteOrderBigEndian) return arg;
@@ -53,18 +56,28 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 }
 
 - (IBAction)downloadJPEG:(id)sender {
-     NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]]));
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]];
+    NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
+    
+//    NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]]));
 //    NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:@"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1022687199,8493043&fm=26&gp=0.jpg"]]));
 }
 - (IBAction)downloadPNG:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png"]]));
+//    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png"]]));
+    
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png"]];
+    NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 - (IBAction)downloadBMP:(id)sender {
    
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"https://ssl.gstatic.com/gb/images/v1_051523630.png"]];
+    NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 
 - (IBAction)downloadGif:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([self gifSizeFormUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]]));
+//    NSLog(@"%@", NSStringFromCGSize([self gifSizeFormUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]]));
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]];
+    NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 
 - (IBAction)useImageSizeToDownLoadJpeg:(id)sender {
@@ -80,6 +93,8 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 }
 
 - (IBAction)useImageSizeToDownBmp:(id)sender {
+
+    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"https://ssl.gstatic.com/gb/images/v1_051523630.png"]]));
 }
 - (IBAction)useImageSizeToDownloadGif:(id)sender {
      NSLog(@"%@", NSStringFromCGSize([UIImage getImageSizeWithURL:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]));
@@ -92,25 +107,11 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil
                                                      error:nil];
     
-    /**
-     if(data.length == 4)
-     {
-     short w1 = 0, w2 = 0;
-     [data getBytes:&w1 range:NSMakeRange(0, 1)];
-     [data getBytes:&w2 range:NSMakeRange(1, 1)];
-     short w = w1 + (w2 << 8);
-     short h1 = 0, h2 = 0;
-     [data getBytes:&h1 range:NSMakeRange(2, 1)];
-     [data getBytes:&h2 range:NSMakeRange(3, 1)];
-     short h = h1 + (h2 << 8);
-     size =  CGSizeMake(w, h);
-     }
-     */
-    
     if (data.length == 4) {
         UInt16 w = 0, h = 0;
         [data getBytes:&w range:NSMakeRange(0, 2)];
         [data getBytes:&h range:NSMakeRange(2, 2)];
+        // FIXME: 按理网络数据是大端，gif 拿的宽高应和png，jpg一样转小端，但是现在却不需要
 //        w = XCSSwapWebIntToInt16(w);
 //        h = XCSSwapWebIntToInt16(h);
         size = CGSizeMake(w, h);
@@ -192,26 +193,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil
                                                      error:nil];
     
-    /**
-     if (data.length == 8) {
-     int w1 = 0, w2 = 0, w3 = 0, w4 = 0;
-     [data getBytes:&w1 range:NSMakeRange(0, 1)];
-     [data getBytes:&w2 range:NSMakeRange(1, 1)];
-     [data getBytes:&w3 range:NSMakeRange(2, 1)];
-     [data getBytes:&w4 range:NSMakeRange(3, 1)];
-     int w = (w1 << 24) + (w2 << 16) + (w3 << 8) + w4;
-     
-     int h1 = 0, h2 = 0, h3 = 0, h4 = 0;
-     [data getBytes:&h1 range:NSMakeRange(4, 1)];
-     [data getBytes:&h2 range:NSMakeRange(5, 1)];
-     [data getBytes:&h3 range:NSMakeRange(6, 1)];
-     [data getBytes:&h4 range:NSMakeRange(7, 1)];
-     int h = (h1 << 24) + (h2 << 16) + (h3 << 8) + h4;
-     
-     CGSize size = CGSizeMake(w, h);
-     }
-     */
-    
     CGSize size = CGSizeZero;
     if (data.length >= 8) {
         int w = 0, h = 0;
@@ -221,7 +202,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
         h = XCSSwapWebIntToInt32(h);
         size = CGSizeMake(w, h);
     }
-    
     return size;
 }
 
