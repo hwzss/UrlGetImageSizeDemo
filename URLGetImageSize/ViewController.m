@@ -206,14 +206,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 }
 
 
-#pragma -mark NSURLConnectionDataDelegate
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-      NSLog(@"%s",__func__);
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-      NSLog(@"%s",__func__);
-}
 
 #pragma -mark NSURLSessionDataDelegate
 
@@ -303,45 +295,6 @@ didCompleteWithError:(nullable NSError *)error {
     NSLog(@"%s",__func__);
 }
 
-
-- (NSString *)ToHex:(int)tmpid
-{
-    NSString *nLetterValue;
-    NSString *str =@"";
-    int ttmpig;
-    for (int i = 0; i<9; i++) {
-        ttmpig=tmpid%16;
-        tmpid=tmpid/16;
-        switch (ttmpig)
-        {
-                case 10:
-                nLetterValue =@"A";break;
-                case 11:
-                nLetterValue =@"B";break;
-                case 12:
-                nLetterValue =@"C";break;
-                case 13:
-                nLetterValue =@"D";break;
-                case 14:
-                nLetterValue =@"E";break;
-                case 15:
-                nLetterValue =@"F";break;
-            default:
-                nLetterValue = [NSString stringWithFormat:@"%u",ttmpig];
-                
-        }
-        str = [nLetterValue stringByAppendingString:str];
-        if (tmpid == 0) {
-            break;
-        }
-    }
-    //不够一个字节凑0
-    if(str.length == 1){
-        return [NSString stringWithFormat:@"0%@",str];
-    }else{
-        return str;
-    }
-}
 
 @end
 
