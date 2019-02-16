@@ -8,12 +8,59 @@
 
 #import "UIImage+ImgSize.h"
 #import <ImageIO/ImageIO.h>
+
 @implementation UIImage (ImgSize)
 
-/**
- *  根据图片url获取网络图片尺寸
- */
-+ (CGSize)getImageSizeWithURL:(id)URL{
++ (CGSize)xcs_pngImageSizeWithUrl:(id)url {
+    __block CGSize size = CGSizeZero;
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:@"bytes=16-23" forHTTPHeaderField:@"Range"];
+    
+    dispatch_semaphore_t lock = dispatch_semaphore_create(1);
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data.length >= 8) {
+            int w = 0, h = 0;
+            [data getBytes:&w range:NSMakeRange(0, 4)];
+            [data getBytes:&h range:NSMakeRange(4, 4)];
+            w = CFSwapInt32(w);
+            h = CFSwapInt32(h);
+            size = CGSizeMake(w, h);
+        }
+        dispatch_semaphore_signal(lock);
+    }];
+    [task resume];
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_signal(lock);
+    return size;
+}
+
++ (CGSize)xcs_gifImageSizeWithUrl:(id)url {
+    __block CGSize size = CGSizeZero;
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setValue:@"bytes=6-9" forHTTPHeaderField:@"Range"];
+    
+    dispatch_semaphore_t lock = dispatch_semaphore_create(1);
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data.length == 4) {
+            UInt16 w = 0, h = 0;
+            [data getBytes:&w range:NSMakeRange(0, 2)];
+            [data getBytes:&h range:NSMakeRange(2, 2)];
+            size = CGSizeMake(w, h);
+        }
+        dispatch_semaphore_signal(lock);
+    }];
+    [task resume];
+    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_signal(lock);
+    return size;
+}
+
+
++ (CGSize)xcs_getImageSizeWithUrl:(id)URL {
     NSURL * url = nil;
     if ([URL isKindOfClass:[NSURL class]]) {
         url = URL;

@@ -26,6 +26,12 @@
 #import "UIImage+ImgSize.h"
 #import "XCSImagePrefetcher.h"
 
+static NSString  *PNG_IMG_URL = @"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png";
+static NSString  *JPG_IMG_URL = @"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1022687199,8493043&fm=26&gp=0.jpg";
+static NSString  *JPEG_IMG_URL = @"https://raw.githubusercontent.com/hwzss/MyArticles/master/konw_fastlane/%E7%9B%AE%E5%BD%95%E6%88%AA%E5%9B%BE.jpg";
+static NSString  *GIF_IMG_URL = @"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif";
+static NSString  *BMP_IMG_URL = @"https://ssl.gstatic.com/gb/images/v1_051523630.png";
+
 CF_INLINE uint16_t XCSSwapWebIntToInt16(uint16_t arg) {
     if (NSHostByteOrder() == CFByteOrderBigEndian) return arg;
     return CFSwapInt16(arg);
@@ -50,59 +56,72 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    for (int i = 0; i < 1000; i++) {
-//        XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]];
-//        NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
-//    }
-
 }
+
+#pragma -mark >>XCSImagePrefetcher<<
 - (IBAction)downloadJPG:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([self jpgImageSizeFormUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]]));
-}
-
-- (IBAction)downloadJPEG:(id)sender {
-    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]];
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:JPG_IMG_URL]];
     NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
-    
-//    NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]]));
-//    NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:@"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1022687199,8493043&fm=26&gp=0.jpg"]]));
+}
+- (IBAction)downloadJPEG:(id)sender {
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:JPEG_IMG_URL]];
+    NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 - (IBAction)downloadPNG:(id)sender {
-//    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png"]]));
-    
-    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png"]];
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:PNG_IMG_URL]];
     NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 - (IBAction)downloadBMP:(id)sender {
-   
-    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"https://ssl.gstatic.com/gb/images/v1_051523630.png"]];
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:BMP_IMG_URL]];
     NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 
 - (IBAction)downloadGif:(id)sender {
-//    NSLog(@"%@", NSStringFromCGSize([self gifSizeFormUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]]));
-    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]];
+    XCSImagePrefetcher *fetcher = [[XCSImagePrefetcher alloc] initWithUrl:[NSURL URLWithString:GIF_IMG_URL]];
     NSLog(@"%@", NSStringFromCGSize([fetcher fetchImageSize]));
 }
 
+#pragma -mark >>UIImage+ImagSize<<
 - (IBAction)useImageSizeToDownLoadJpeg:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([UIImage getImageSizeWithURL:@"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1022687199,8493043&fm=26&gp=0.jpg"]));
+    NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:JPEG_IMG_URL]));
 }
 
 - (IBAction)useIMageSizeToDownloadJpg:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([UIImage getImageSizeWithURL:@"http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg"]));
+    NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:JPG_IMG_URL]));
 }
 
 - (IBAction)useImageSizeToDownLoadPng:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([UIImage getImageSizeWithURL:@"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png"]));
+    NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:PNG_IMG_URL]));
 }
 
 - (IBAction)useImageSizeToDownBmp:(id)sender {
-
-    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"https://ssl.gstatic.com/gb/images/v1_051523630.png"]]));
+    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:BMP_IMG_URL]]));
 }
+
 - (IBAction)useImageSizeToDownloadGif:(id)sender {
-     NSLog(@"%@", NSStringFromCGSize([UIImage getImageSizeWithURL:@"https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif"]));
+     NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:GIF_IMG_URL]));
+}
+
+#pragma -mark >>DownloadSomeBytes by Range<<
+
+- (IBAction)downJPG:(id)sender {
+     NSLog(@"%@", NSStringFromCGSize([self jpgImageSizeFormUrl:[NSURL URLWithString:@"http://localhost:8000/Desktop/1024x1024.jpg"]]));
+}
+
+- (IBAction)downPng:(id)sender {
+//    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"http://localhost:8000/Desktop/1024x1024.jpg"]]));
+     NSLog(@"%@", NSStringFromCGSize([UIImage xcs_pngImageSizeWithUrl:[NSURL URLWithString:PNG_IMG_URL]]));
+}
+
+- (IBAction)downBMP:(id)sender {
+}
+
+- (IBAction)downGIF:(id)sender {
+    NSLog(@"%@", NSStringFromCGSize([self gifSizeFormUrl:[NSURL URLWithString:GIF_IMG_URL]]));
+}
+
+- (IBAction)downJPEG:(id)sender {
+    NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:JPEG_IMG_URL]]));
 }
 
 - (CGSize)gifSizeFormUrl:(NSURL *)url {

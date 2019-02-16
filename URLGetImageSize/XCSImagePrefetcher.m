@@ -66,7 +66,9 @@ typedef enum : NSUInteger {
 
 - (CGSize )downloadDataWithUrl:(NSURL *)url {
     if (!_session) {
-        _session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:self delegateQueue:self.queue];
+        NSURLSessionConfiguration *config = NSURLSessionConfiguration.defaultSessionConfiguration;
+        config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+        _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:self.queue];
     }
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request];
