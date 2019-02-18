@@ -8,22 +8,18 @@
 
 /**
  https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png
- 
  https://raw.githubusercontent.com/hwzss/MyArticles/master/iOS%20%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%20Ruby%20%E5%88%9D%E4%BD%93%E9%AA%8C/2018-02-15%2019_16_29.gif
- 
  // jpeg
  https://raw.githubusercontent.com/hwzss/MyArticles/master/konw_fastlane/%E7%9B%AE%E5%BD%95%E6%88%AA%E5%9B%BE.jpg
- 
  // jpg
  https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1022687199,8493043&fm=26&gp=0.jpg
  http://pic1.win4000.com/wallpaper/0/5864b91f1ef63.jpg
- 
  // BMP
  https://ssl.gstatic.com/gb/images/v1_051523630.png
  */
 
 #import "ViewController.h"
-#import "UIImage+ImgSize.h"
+#import "NSURL+ImageSize.h"
 #import "XCSImagePrefetcher.h"
 
 static NSString  *PNG_IMG_URL = @"https://raw.githubusercontent.com/hwzss/sketch_learning/master/%E6%9E%81%E6%81%B6%E4%B8%96%E4%BB%A3.png";
@@ -83,15 +79,16 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 
 #pragma -mark >>UIImage+ImagSize<<
 - (IBAction)useImageSizeToDownLoadJpeg:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:JPEG_IMG_URL]));
+    
+    NSLog(@"%@", NSStringFromCGSize([[NSURL URLWithString:JPEG_IMG_URL] xcs_imageSize]));
 }
 
 - (IBAction)useIMageSizeToDownloadJpg:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:JPG_IMG_URL]));
+    NSLog(@"%@", NSStringFromCGSize([[NSURL URLWithString:JPG_IMG_URL] xcs_imageSize]));
 }
 
 - (IBAction)useImageSizeToDownLoadPng:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:PNG_IMG_URL]));
+    NSLog(@"%@", NSStringFromCGSize([[NSURL URLWithString:PNG_IMG_URL] xcs_imageSize]));
 }
 
 - (IBAction)useImageSizeToDownBmp:(id)sender {
@@ -99,7 +96,7 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 }
 
 - (IBAction)useImageSizeToDownloadGif:(id)sender {
-     NSLog(@"%@", NSStringFromCGSize([UIImage xcs_getImageSizeWithUrl:GIF_IMG_URL]));
+     NSLog(@"%@", NSStringFromCGSize([[NSURL URLWithString:GIF_IMG_URL] xcs_imageSize]));
 }
 
 #pragma -mark >>DownloadSomeBytes by Range<<
@@ -110,7 +107,7 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 
 - (IBAction)downPng:(id)sender {
 //    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"http://localhost:8000/Desktop/1024x1024.jpg"]]));
-     NSLog(@"%@", NSStringFromCGSize([UIImage xcs_pngImageSizeWithUrl:[NSURL URLWithString:PNG_IMG_URL]]));
+     NSLog(@"%@", NSStringFromCGSize([[NSURL URLWithString:PNG_IMG_URL] xcs_pngImageSize]));
 }
 
 - (IBAction)downBMP:(id)sender {

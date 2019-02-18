@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A83BC3F5221A40C300B66723 /* NSURL+ImageSize.m in Sources */ = {isa = PBXBuildFile; fileRef = A83BC3F4221A40C300B66723 /* NSURL+ImageSize.m */; };
 		A844950922028C5200CC9BFD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A844950822028C5200CC9BFD /* AppDelegate.m */; };
 		A844950C22028C5200CC9BFD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A844950B22028C5200CC9BFD /* ViewController.m */; };
 		A844950F22028C5200CC9BFD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A844950D22028C5200CC9BFD /* Main.storyboard */; };
@@ -14,7 +15,6 @@
 		A844951422028C5400CC9BFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A844951222028C5400CC9BFD /* LaunchScreen.storyboard */; };
 		A844951722028C5400CC9BFD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A844951622028C5400CC9BFD /* main.m */; };
 		A844952122028C5400CC9BFD /* URLGetImageSizeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A844952022028C5400CC9BFD /* URLGetImageSizeTests.m */; };
-		A87C2D322203E55B00744834 /* UIImage+ImgSize.m in Sources */ = {isa = PBXBuildFile; fileRef = A87C2D302203E55B00744834 /* UIImage+ImgSize.m */; };
 		A87C2D352203F70600744834 /* XCSImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = A87C2D342203F70600744834 /* XCSImagePrefetcher.m */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A83BC3F3221A40C300B66723 /* NSURL+ImageSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURL+ImageSize.h"; sourceTree = "<group>"; };
+		A83BC3F4221A40C300B66723 /* NSURL+ImageSize.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURL+ImageSize.m"; sourceTree = "<group>"; };
 		A844950422028C5200CC9BFD /* URLGetImageSize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = URLGetImageSize.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A844950722028C5200CC9BFD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A844950822028C5200CC9BFD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -42,8 +44,6 @@
 		A844951C22028C5400CC9BFD /* URLGetImageSizeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = URLGetImageSizeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A844952022028C5400CC9BFD /* URLGetImageSizeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URLGetImageSizeTests.m; sourceTree = "<group>"; };
 		A844952222028C5400CC9BFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A87C2D302203E55B00744834 /* UIImage+ImgSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImgSize.m"; sourceTree = "<group>"; };
-		A87C2D312203E55B00744834 /* UIImage+ImgSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImgSize.h"; sourceTree = "<group>"; };
 		A87C2D332203F70600744834 /* XCSImagePrefetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCSImagePrefetcher.h; sourceTree = "<group>"; };
 		A87C2D342203F70600744834 /* XCSImagePrefetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XCSImagePrefetcher.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,8 +93,8 @@
 				A844950B22028C5200CC9BFD /* ViewController.m */,
 				A87C2D332203F70600744834 /* XCSImagePrefetcher.h */,
 				A87C2D342203F70600744834 /* XCSImagePrefetcher.m */,
-				A87C2D312203E55B00744834 /* UIImage+ImgSize.h */,
-				A87C2D302203E55B00744834 /* UIImage+ImgSize.m */,
+				A83BC3F3221A40C300B66723 /* NSURL+ImageSize.h */,
+				A83BC3F4221A40C300B66723 /* NSURL+ImageSize.m */,
 				A844950D22028C5200CC9BFD /* Main.storyboard */,
 				A844951022028C5400CC9BFD /* Assets.xcassets */,
 				A844951222028C5400CC9BFD /* LaunchScreen.storyboard */,
@@ -214,8 +214,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A844950C22028C5200CC9BFD /* ViewController.m in Sources */,
+				A83BC3F5221A40C300B66723 /* NSURL+ImageSize.m in Sources */,
 				A844951722028C5400CC9BFD /* main.m in Sources */,
-				A87C2D322203E55B00744834 /* UIImage+ImgSize.m in Sources */,
 				A87C2D352203F70600744834 /* XCSImagePrefetcher.m in Sources */,
 				A844950922028C5200CC9BFD /* AppDelegate.m in Sources */,
 			);

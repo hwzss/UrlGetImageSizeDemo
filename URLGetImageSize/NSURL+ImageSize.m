@@ -1,19 +1,20 @@
 //
-//  UIImage+ImgSize.m
-//  CleverParents
+//  NSURL+ImageSize.m
+//  URLGetImageSize
 //
-//  Created by Candy on 2017/11/13.
-//  Copyright © 2017年 com.zhiweism. All rights reserved.
+//  Created by kaifa on 2019/2/18.
+//  Copyright © 2019 MC_MaoDou. All rights reserved.
 //
 
-#import "UIImage+ImgSize.h"
-#import <ImageIO/ImageIO.h>
+#import "NSURL+ImageSize.h"
 
-@implementation UIImage (ImgSize)
+@implementation NSURL (ImageSize)
 
-+ (CGSize)xcs_pngImageSizeWithUrl:(id)url {
+- (CGSize)xcs_pngImageSize {
     __block CGSize size = CGSizeZero;
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self];
+    if (!request) return size;
+    
     [request setValue:@"bytes=16-23" forHTTPHeaderField:@"Range"];
     
     dispatch_semaphore_t lock = dispatch_semaphore_create(1);
@@ -36,9 +37,11 @@
     return size;
 }
 
-+ (CGSize)xcs_gifImageSizeWithUrl:(id)url {
+- (CGSize)xcs_gifImageSize {
     __block CGSize size = CGSizeZero;
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self];
+    if (!request) return size;
+    
     [request setValue:@"bytes=6-9" forHTTPHeaderField:@"Range"];
     
     dispatch_semaphore_t lock = dispatch_semaphore_create(1);
@@ -59,23 +62,11 @@
     return size;
 }
 
-
-+ (CGSize)xcs_getImageSizeWithUrl:(id)URL {
-    NSURL * url = nil;
-    if ([URL isKindOfClass:[NSURL class]]) {
-        url = URL;
-    }
-    if ([URL isKindOfClass:[NSString class]]) {
-        url = [NSURL URLWithString:URL];
-    }
-    if (!URL) {
-        return CGSizeZero;
-    }
-    CGImageSourceRef imageSourceRef = CGImageSourceCreateWithURL((CFURLRef)url, NULL);
+- (CGSize)xcs_imageSize {
+    CGImageSourceRef imageSourceRef = CGImageSourceCreateWithURL((CFURLRef)self, NULL);
     CGFloat width = 0, height = 0;
     
-    if (imageSourceRef) {
-        
+    if (imageSourceRef) {        
         // 获取图像属性
         CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, NULL);
         
@@ -133,4 +124,3 @@
 
 
 @end
-
