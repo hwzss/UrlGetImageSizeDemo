@@ -83,10 +83,6 @@ typedef enum : NSUInteger {
 
 #pragma -mark NSURLSessionDataDelegate
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
-    completionHandler(NSURLSessionResponseAllow);
-}
-
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveData:(NSData *)data {
     if (!data) return;
@@ -174,14 +170,12 @@ didCompleteWithError:(nullable NSError *)error {
     [data getBytes:&word2 range:NSMakeRange(2, 1)];
     [data getBytes:&word3 range:NSMakeRange(3, 1)];
     if (word0 == 0xFF && word1 == 0xD8 && word2 == 0xFF && word3 == 0xE0) {
-        NSLog(@"抓到了0xFFD8FFE0");
         UInt8 c0 = 0, c1 = 0, c2 = 0, c3 = 0;
         [data getBytes:&c0 range:NSMakeRange(6, 1)];
         [data getBytes:&c1 range:NSMakeRange(7, 1)];
         [data getBytes:&c2 range:NSMakeRange(8, 1)];
         [data getBytes:&c3 range:NSMakeRange(9, 1)];
         if (c0 == 'J' && c1 == 'F' && c2 == 'I' && c3 == 'F') {
-            NSLog(@"进入识别");
             UInt16 block_length = 0;
             [data getBytes:&block_length range:NSMakeRange(4, 2)];
             block_length = XCSSwapWebIntToInt16(block_length);
