@@ -117,7 +117,7 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 }
 
 - (IBAction)downJPEG:(id)sender {
-    NSLog(@"%@", NSStringFromCGSize([self jpegImageSizeFromUrl:[NSURL URLWithString:JPEG_IMG_URL]]));
+    
 }
 
 - (CGSize)gifSizeFormUrl:(NSURL *)url {
@@ -136,17 +136,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
     return size;
 }
 
-- (CGSize)jpegImageSizeFromUrl:(NSURL *)url {
-    CGSize size = CGSizeZero;
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request];
-    _imageData = [[NSMutableData alloc] init];
-    [task resume];
-
-    return size;
-}
 
 - (CGSize)jpgImageSizeFormUrl:(NSURL *)url {
     CGSize size = CGSizeZero;
@@ -220,93 +209,6 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
     }
     return size;
 }
-
-
-
-#pragma -mark NSURLSessionDataDelegate
-
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
-    NSLog(@"%s",__func__);
-    completionHandler(NSURLSessionResponseAllow);
-}
-
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
-    didReceiveData:(NSData *)data {
-    NSLog(@"%s",__func__);
-    [_imageData appendData:data];
-    if (_imageData.length > 2) {
-        // jpeg 文件格式头中有JFTF也有EXIF，EXIF相对复杂，具体头部结构可以见https://blog.csdn.net/ryfdizuo/article/details/41250775
-        // FF D8 FF E0 (XX XX 这两字节为长度) ('JF' 'TF' 转为ascll码值)
-        UInt8 word0 = 0x0, word1 = 0x0, word2 = 0x0, word3 = 0x0;
-        [_imageData getBytes:&word0 range:NSMakeRange(0, 1)];
-        [_imageData getBytes:&word1 range:NSMakeRange(1, 1)];
-        [_imageData getBytes:&word2 range:NSMakeRange(2, 1)];
-        [_imageData getBytes:&word3 range:NSMakeRange(3, 1)];
-        if (word0 == 0xFF && word1 == 0xD8 && word2 == 0xFF && word3 == 0xE0) {
-            NSLog(@"抓到了0xFFD8FFE0");
-            UInt8 c0 = 0, c1 = 0, c2 = 0, c3 = 0;
-            [_imageData getBytes:&c0 range:NSMakeRange(6, 1)];
-            [_imageData getBytes:&c1 range:NSMakeRange(7, 1)];
-            [_imageData getBytes:&c2 range:NSMakeRange(8, 1)];
-            [_imageData getBytes:&c3 range:NSMakeRange(9, 1)];
-            if (c0 == 'J' && c1 == 'F' && c2 == 'I' && c3 == 'F') {
-                NSLog(@"进入识别");
-                UInt16 block_length = 0;
-                [_imageData getBytes:&block_length range:NSMakeRange(4, 2)];
-                if (NSHostByteOrder() == CFByteOrderBigEndian) {
-                    block_length = CFSwapInt16HostToBig(block_length);
-                }else {
-                    block_length = XCSSwapWebIntToInt16(block_length);
-                }
-                int i = 4;
-                do {
-                    i += block_length;
-                    if (i > data.length) {
-                        return;
-                    }
-                    UInt8 aW = 0x0;
-                    [_imageData getBytes:&aW range:NSMakeRange(i, 1)];
-                    if (aW != 0xFF) {
-                        return;
-                    }
-                    
-                    UInt8 ca = 0x0;
-                    [_imageData getBytes:&ca range:NSMakeRange(i+1, 1)];
-                    if (ca >= 0xC0 && ca<= 0xC3) {
-                        /**
-                         图片信息段 FF CO (xx xx 该段长度) XX(抛弃字节，不用) (HH HH 高度) (WW WW 宽度) ...后面是其他信息。
-                         这里宽高段和 png gif 等都不一样，jpg 是高在前
-                         */
-                        UInt16 w = 0, h = 0;
-                        [_imageData getBytes:&h range:NSMakeRange(i + 5, 2)];
-                        [_imageData getBytes:&w range:NSMakeRange(i + 7, 2)];
-                        w = XCSSwapWebIntToInt16(w);
-                        h = XCSSwapWebIntToInt16(h);
-                        NSLog(@"size:%@", NSStringFromCGSize(CGSizeMake(w, h)));
-                        [dataTask cancel];
-                        return;
-                    }else {
-                        i += 2;
-                        [_imageData getBytes:&block_length range:NSMakeRange(i, 2)];
-                        if (NSHostByteOrder() == CFByteOrderBigEndian) {
-                            block_length = CFSwapInt16HostToBig(block_length);
-                        }else {
-                            block_length = XCSSwapWebIntToInt16(block_length);
-                        }
-                    }
-                } while (i < _imageData.length);
-                NSLog(@"结束。。。。。。");
-            }
-            
-        }
-    }
-}
-
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
-didCompleteWithError:(nullable NSError *)error {
-    NSLog(@"%s",__func__);
-}
-
 
 @end
 
