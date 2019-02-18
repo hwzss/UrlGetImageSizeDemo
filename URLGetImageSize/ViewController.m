@@ -102,11 +102,10 @@ CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
 #pragma -mark >>DownloadSomeBytes by Range<<
 
 - (IBAction)downJPG:(id)sender {
-     NSLog(@"%@", NSStringFromCGSize([self jpgImageSizeFormUrl:[NSURL URLWithString:@"http://localhost:8000/Desktop/1024x1024.jpg"]]));
+     NSLog(@"%@", NSStringFromCGSize([self jpgImageSizeFormUrl:[NSURL URLWithString:JPG_IMG_URL]]));
 }
 
 - (IBAction)downPng:(id)sender {
-//    NSLog(@"%@", NSStringFromCGSize([self pngImageSizeFromUrl:[NSURL URLWithString:@"http://localhost:8000/Desktop/1024x1024.jpg"]]));
      NSLog(@"%@", NSStringFromCGSize([[NSURL URLWithString:PNG_IMG_URL] xcs_pngImageSize]));
 }
 

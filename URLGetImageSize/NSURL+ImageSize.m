@@ -69,10 +69,8 @@
     if (imageSourceRef) {        
         // 获取图像属性
         CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSourceRef, 0, NULL);
-        
         //以下是对手机32位、64位的处理
-        if (imageProperties != NULL) {
-            
+        if (imageProperties != NULL) {            
             CFNumberRef widthNumberRef = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
             
 #if defined(__LP64__) && __LP64__
