@@ -9,12 +9,10 @@
 #import "XCSImagePrefetcher.h"
 
 CF_INLINE uint16_t XCSSwapWebIntToInt16(uint16_t arg) {
-    if (NSHostByteOrder() == CFByteOrderBigEndian) return arg;
-    return CFSwapInt16(arg);
+    return CFSwapInt16BigToHost(arg);
 }
 CF_INLINE uint16_t XCSSwapWebIntToInt32(uint32_t arg) {
-    if (NSHostByteOrder() == CFByteOrderBigEndian) return arg;
-    return CFSwapInt32(arg);
+    return CFSwapInt32BigToHost(arg);
 }
 
 typedef enum : NSUInteger {
