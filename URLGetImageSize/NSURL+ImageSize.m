@@ -17,8 +17,7 @@
     
     [request setValue:@"bytes=16-23" forHTTPHeaderField:@"Range"];
     
-    dispatch_semaphore_t lock = dispatch_semaphore_create(1);
-    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_t lock = dispatch_semaphore_create(0);    
     NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data.length >= 8) {
@@ -33,7 +32,6 @@
     }];
     [task resume];
     dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
-    dispatch_semaphore_signal(lock);
     return size;
 }
 
@@ -44,8 +42,7 @@
     
     [request setValue:@"bytes=6-9" forHTTPHeaderField:@"Range"];
     
-    dispatch_semaphore_t lock = dispatch_semaphore_create(1);
-    dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    dispatch_semaphore_t lock = dispatch_semaphore_create(0);
     NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (data.length == 4) {
@@ -58,7 +55,6 @@
     }];
     [task resume];
     dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
-    dispatch_semaphore_signal(lock);
     return size;
 }
 
