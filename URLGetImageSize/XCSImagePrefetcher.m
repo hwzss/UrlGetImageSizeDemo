@@ -23,7 +23,7 @@ typedef enum : NSUInteger {
     XCSImagePrefetcherImageType_UNKOWN
 } XCSImagePrefetcherImageType;
 
-#define UN_FETCHED_IMAGE_SIZE CGSizeZero
+#define UN_FETCHED_IMAGE_SIZE CGSizeMake(CGFLOAT_MIN, CGFLOAT_MIN)
 
 @interface XCSImagePrefetcher ()<NSURLSessionDataDelegate>
 
@@ -33,16 +33,23 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) XCSImagePrefetcherImageType imageType;
 @property (nonatomic, assign) CGSize imageSize;
 
+@property (nonatomic, assign) NSInteger maxTimerinterval;
+
 @end
 
 @implementation XCSImagePrefetcher {
     dispatch_semaphore_t _lock;
 }
 
--(instancetype)initWithUrl:(NSURL *)url{
+- (instancetype)initWithUrl:(NSURL *)url {
+    return [self initWithUrl:url timeInterval:1.5];
+}
+
+- (instancetype)initWithUrl:(NSURL *)url timeInterval:(NSInteger) timeInterval {
     if (!url) return nil;
-    self=[super init];
+    self = [super init];
     if (self) {
+        _maxTimerinterval = timeInterval;
         _imageUrl = url;
         _imageSize = UN_FETCHED_IMAGE_SIZE;
         _imageType = XCSImagePrefetcherImageType_UNKOWN;
@@ -68,14 +75,12 @@ typedef enum : NSUInteger {
         config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
         _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:self.queue];
     }
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:3];
     NSURLSessionDataTask *task = [_session dataTaskWithRequest:request];
-    _lock = dispatch_semaphore_create(1);
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    _lock = dispatch_semaphore_create(0);
     [task resume];
-   
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    dispatch_semaphore_signal(_lock);
+    dispatch_time_t waitTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_maxTimerinterval * NSEC_PER_SEC));
+    dispatch_semaphore_wait(_lock, waitTime);
     return _imageSize;
 }
 
@@ -124,6 +129,7 @@ typedef enum : NSUInteger {
     // 获取到提前数据结束
     if (!CGSizeEqualToSize(self.imageSize, UN_FETCHED_IMAGE_SIZE)) {
         [dataTask cancel];
+        dispatch_semaphore_signal(_lock);
     }
 }
 
@@ -135,13 +141,13 @@ didCompleteWithError:(nullable NSError *)error {
             if (image) _imageSize = image.size;
         }
     }
-        
+    
     dispatch_semaphore_signal(_lock);
 }
 
 - (XCSImagePrefetcherImageType)fetchImageTtypeFormData:(NSData *)data {
     if(data.length < 2) return XCSImagePrefetcherImageType_UNKOWN;
-
+    
     UInt8 word0 = 0x0, word1 = 0x0;
     [data getBytes:&word0 range:NSMakeRange(0, 1)];
     [data getBytes:&word1 range:NSMakeRange(1, 1)];
@@ -217,9 +223,9 @@ didCompleteWithError:(nullable NSError *)error {
 
 - (CGSize)fetchHWFromPNGData:(NSData *)data {
     /**
-        png 头格式
-        89 50 4E 47 0D 0A 1A 0A (4byte IDHR) (4Byte CHUNKTYPE) (4Byte WIDTH) (4Byte HEIGHT) ....
-        至少需要24bytes
+     png 头格式
+     89 50 4E 47 0D 0A 1A 0A (4byte IDHR) (4Byte CHUNKTYPE) (4Byte WIDTH) (4Byte HEIGHT) ....
+     至少需要24bytes
      */
     if (data.length < 24) return CGSizeZero;
     UInt32 w = 0, h = 0;
@@ -267,7 +273,7 @@ didCompleteWithError:(nullable NSError *)error {
         h = XCSSwapWebIntToInt32(h);
         return CGSizeMake(w, h);
     }
-
+    
     return CGSizeZero;
 }
 

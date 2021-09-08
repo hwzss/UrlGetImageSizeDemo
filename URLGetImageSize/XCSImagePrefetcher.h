@@ -17,7 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSURL *imageUrl;
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithUrl:(NSURL *)url NS_DESIGNATED_INITIALIZER;
+
+/// 初始化图片获取器
+/// @param url url
+/// @param timeInterval 最大等待时间，超过时间则获取失败。同步请求过程中建议设置这个时间，目前默认 1.5 秒
+- (instancetype)initWithUrl:(NSURL *)url timeInterval:(NSInteger)timeInterval NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithUrl:(NSURL *)url;
+
+
+/// 获取图片大小，同步方式，建议放非 main thread 线程执行
 - (CGSize)fetchImageSize;
 
 @end
